@@ -12,6 +12,12 @@
                     <div>{{ question.create_date }}</div>
                 </div>
             </div>
+            <div class="my-3">
+                {% if request.user == qeuston.author %}
+                <a href="{% url 'pybo:question_modify' question.id %}"
+                   class="btn btn-sm btn-outline-secondary">수정</a>
+                {% endif %}
+            </div>
         </div>
     </div>
     <!-- 답변 -->
