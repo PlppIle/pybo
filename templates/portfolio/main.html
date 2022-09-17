@@ -13,19 +13,48 @@
     <div class="row">
         <div class="col">
             <div class="p-3 border bg-light">
-                <a href="#" class="btn btn-outline-warning" role="button" aria-pressed="true">Who is Mori</a>
+                <a href="{% url 'portfolio:who' %}" class="btn btn-outline-warning" role="button" aria-pressed="true">Who is Mori</a>
             </div>
         </div>
         <div class="col">
             <div class="p-3 border bg-light">
-                <a href="#" class="btn btn-outline-warning" role="button" aria-pressed="true">Where is Mori?</a>
+                <a href="{% url 'portfolio:where' %}" class="btn btn-outline-warning" role="button" aria-pressed="true">Where is Mori?</a>
             </div>
         </div>
         <div class="col">
             <div class="p-3 border bg-light">
-                <a href="#" class="btn btn-outline-warning" role="button" aria-pressed="true">What Mori can do?</a>
+                <a href="{% url 'portfolio:what' %}" class="btn btn-outline-warning" role="button" aria-pressed="true">What Mori can do?</a>
             </div>
         </div>
     </div>
 </div>
+
+<!-- 답변 -->
+{% for book in guestbook %}
+<div class="container">
+        {% csrf_token %}
+        <div class="card my-3">
+            <div class="card-body">
+                <div class="card_text" style="white-space: pre-line;">{{ book.content }}</div>
+                <div class="d-flex justify-content-end">
+                    <div class="badge bg-light text-dark p-2 text-start">
+                        <div class="mb-2">{{ book.author.username }}</div>
+                        <div>{{ book.create_date }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+{% endfor %}
+
+<div class="container">
+    <form action="{% url 'portfolio:guestbook_create' %}" method="post">
+        {% csrf_token %}
+        <label for="content" class="form-label">방명록</label>
+        <textarea class="form-control" name="content" id="content" rows="5"></textarea>
+        <button type="submit" class="btn btn-outline-warning">등록</button>
+    </form>
+</div>
+
 {% endblock %}
