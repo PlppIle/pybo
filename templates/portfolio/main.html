@@ -1,6 +1,17 @@
 {% extends 'base.html' %}
 {% block content %}
 
+<!-- message 표시
+{% if messages %}
+<div class="alert alert-danger my-3" role="alert">
+    {% for message in messages %}
+        <strong>{{ message.tags }}</strong>
+        <ul><li>{{ message.message }}</li></ul>
+    {% endfor %}
+</div>
+{% endif %}
+-->
+
 <div>
     <h3 class="text-center border-bottom my-4"><b>Stay Home</b></h3>
     <div class="text-center">
@@ -38,10 +49,26 @@
                 <div class="card_text" style="white-space: pre-line;">{{ book.content }}</div>
                 <div class="d-flex justify-content-end">
                     <div class="badge bg-light text-dark p-2 text-start">
+                        {% if request.user.is_superuser %}
                         <div class="mb-2">{{ book.author.username }}</div>
+                        {% endif %}
                         <div>{{ book.create_date }}</div>
+
+                        {% comment %}
+                        <!-- 수정버튼
+                        <div class="my-3">
+                            {% if request.user == book.author %}
+                            <a href="{% url 'portfolio:guestbook_modify' %}"
+                               class="btn btn-sm btn-outline-warning">수정</a>
+                            {% endif %}
+                        </div>
+                        -->
+                        {% endcomment %}
                     </div>
                 </div>
+                {% if request.user.is_superuser %}
+                <a href="{% url 'portfolio:index' %}" class="btn btn-sm btn-outline-warning">삭제</a>
+                {% endif %}
             </div>
         </div>
     </form>
@@ -52,8 +79,9 @@
     <form action="{% url 'portfolio:guestbook_create' %}" method="post">
         {% csrf_token %}
         <label for="content" class="form-label">방명록</label>
-        <textarea class="form-control" name="content" id="content" rows="5"></textarea>
-        <button type="submit" class="btn btn-outline-warning">등록</button>
+        <textarea {% if not user.is_authenticated %}disabled{% endif %}
+                class="form-control" name="content" id="content" rows="5"></textarea>
+        <button type="submit" class="btn btn-outline-warning my-1">등록</button>
     </form>
 </div>
 
